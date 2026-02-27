@@ -1,0 +1,164 @@
+- key: custom
+  label_it: "Custom"
+  label_en: "Custom"
+  default_dayparts: []
+  benchmarks:
+    cogs_pct: { min: 0.15, max: 0.50, default: 0.30 }
+    labor_pct: { min: 0.18, max: 0.50, default: 0.30 }
+    opex_pct: { min: 0.05, max: 0.30, default: 0.12 }
+    marketing_pct: { min: 0.00, max: 0.15, default: 0.03 }
+    fee_pct: { min: 0.00, max: 0.15, default: 0.00 }
+
+- key: coffee_shop
+  label_it: "Caffetteria"
+  label_en: "Coffee shop"
+  default_dayparts: [Breakfast, MidMorning, Afternoon]
+  benchmarks:
+    cogs_pct: { min: 0.18, max: 0.35, default: 0.25 }
+    labor_pct: { min: 0.22, max: 0.42, default: 0.30 }
+    opex_pct: { min: 0.06, max: 0.20, default: 0.10 }
+    marketing_pct: { min: 0.01, max: 0.08, default: 0.03 }
+    fee_pct: { min: 0.00, max: 0.10, default: 0.00 }
+
+- key: coffee_bakery
+  label_it: "Caffetteria & Bakery"
+  label_en: "Coffee & bakery"
+  default_dayparts: [Breakfast, MidMorning, Lunch, Afternoon]
+  benchmarks:
+    cogs_pct: { min: 0.22, max: 0.40, default: 0.30 }
+    labor_pct: { min: 0.24, max: 0.44, default: 0.32 }
+    opex_pct: { min: 0.06, max: 0.22, default: 0.12 }
+    marketing_pct: { min: 0.01, max: 0.08, default: 0.03 }
+    fee_pct: { min: 0.00, max: 0.12, default: 0.00 }
+
+- key: coffee_hot_food
+  label_it: "Caffetteria con tavola calda"
+  label_en: "Coffee shop with hot food"
+  default_dayparts: [Breakfast, MidMorning, Lunch, Afternoon]
+  benchmarks:
+    cogs_pct: { min: 0.24, max: 0.42, default: 0.32 }
+    labor_pct: { min: 0.24, max: 0.45, default: 0.33 }
+    opex_pct: { min: 0.07, max: 0.24, default: 0.13 }
+    marketing_pct: { min: 0.01, max: 0.08, default: 0.03 }
+    fee_pct: { min: 0.00, max: 0.12, default: 0.00 }
+
+- key: specialty_coffee
+  label_it: "Specialty Coffee"
+  label_en: "Specialty coffee"
+  default_dayparts: [Breakfast, MidMorning, Afternoon]
+  benchmarks:
+    cogs_pct: { min: 0.18, max: 0.33, default: 0.24 }
+    labor_pct: { min: 0.24, max: 0.45, default: 0.34 }
+    opex_pct: { min: 0.06, max: 0.22, default: 0.12 }
+    marketing_pct: { min: 0.02, max: 0.10, default: 0.05 }
+    fee_pct: { min: 0.00, max: 0.12, default: 0.00 }
+
+- key: fast_food
+  label_it: "Fast Food"
+  label_en: "Fast food"
+  default_dayparts: [Lunch, Dinner, LateNight]
+  benchmarks:
+    cogs_pct: { min: 0.25, max: 0.38, default: 0.30 }
+    labor_pct: { min: 0.22, max: 0.38, default: 0.28 }
+    opex_pct: { min: 0.08, max: 0.22, default: 0.12 }
+    marketing_pct: { min: 0.02, max: 0.10, default: 0.04 }
+    fee_pct: { min: 0.00, max: 0.15, default: 0.00 }
+
+- key: fast_casual
+  label_it: "Ristorante Fast Casual"
+  label_en: "Fast casual restaurant"
+  default_dayparts: [Lunch, Dinner]
+  benchmarks:
+    cogs_pct: { min: 0.25, max: 0.40, default: 0.32 }
+    labor_pct: { min: 0.25, max: 0.42, default: 0.33 }
+    opex_pct: { min: 0.08, max: 0.24, default: 0.13 }
+    marketing_pct: { min: 0.02, max: 0.10, default: 0.04 }
+    fee_pct: { min: 0.00, max: 0.15, default: 0.00 }
+
+- key: full_service_restaurant
+  label_it: "Ristorante"
+  label_en: "Restaurant"
+  default_dayparts: [Lunch, Dinner, LateNight]
+  benchmarks:
+    cogs_pct: { min: 0.28, max: 0.42, default: 0.34 }
+    labor_pct: { min: 0.30, max: 0.48, default: 0.38 }
+    opex_pct: { min: 0.10, max: 0.26, default: 0.16 }
+    marketing_pct: { min: 0.02, max: 0.10, default: 0.04 }
+    fee_pct: { min: 0.00, max: 0.15, default: 0.00 }
+
+- key: sushi_restaurant
+  label_it: "Sushi Restaurant"
+  label_en: "Sushi restaurant"
+  default_dayparts: [Lunch, Dinner]
+  benchmarks:
+    cogs_pct: { min: 0.30, max: 0.48, default: 0.38 }
+    labor_pct: { min: 0.26, max: 0.44, default: 0.34 }
+    opex_pct: { min: 0.08, max: 0.24, default: 0.13 }
+    marketing_pct: { min: 0.02, max: 0.10, default: 0.04 }
+    fee_pct: { min: 0.00, max: 0.15, default: 0.00 }
+
+- key: pizzeria
+  label_it: "Pizzeria"
+  label_en: "Pizzeria"
+  default_dayparts: [Lunch, Dinner, LateNight]
+  benchmarks:
+    cogs_pct: { min: 0.22, max: 0.35, default: 0.28 }
+    labor_pct: { min: 0.25, max: 0.42, default: 0.33 }
+    opex_pct: { min: 0.08, max: 0.24, default: 0.14 }
+    marketing_pct: { min: 0.01, max: 0.08, default: 0.03 }
+    fee_pct: { min: 0.00, max: 0.12, default: 0.00 }
+
+- key: poke_bowl
+  label_it: "Poke / Bowl"
+  label_en: "Poke / bowl"
+  default_dayparts: [Lunch, Dinner, DeliveryAllDay]
+  benchmarks:
+    cogs_pct: { min: 0.28, max: 0.45, default: 0.36 }
+    labor_pct: { min: 0.22, max: 0.38, default: 0.28 }
+    opex_pct: { min: 0.08, max: 0.22, default: 0.12 }
+    marketing_pct: { min: 0.02, max: 0.10, default: 0.05 }
+    fee_pct: { min: 0.00, max: 0.15, default: 0.00 }
+
+- key: gelato_shop
+  label_it: "Gelateria"
+  label_en: "Ice cream shop"
+  default_dayparts: [Afternoon, Aperitivo, LateNight]
+  benchmarks:
+    cogs_pct: { min: 0.18, max: 0.30, default: 0.24 }
+    labor_pct: { min: 0.20, max: 0.40, default: 0.30 }
+    opex_pct: { min: 0.06, max: 0.20, default: 0.12 }
+    marketing_pct: { min: 0.01, max: 0.08, default: 0.03 }
+    fee_pct: { min: 0.00, max: 0.12, default: 0.00 }
+
+- key: cocktail_bar
+  label_it: "Cocktail Bar / Aperitivo"
+  label_en: "Cocktail bar / aperitif"
+  default_dayparts: [Aperitivo, Dinner, LateNight]
+  benchmarks:
+    cogs_pct: { min: 0.18, max: 0.32, default: 0.25 }
+    labor_pct: { min: 0.22, max: 0.42, default: 0.32 }
+    opex_pct: { min: 0.10, max: 0.28, default: 0.16 }
+    marketing_pct: { min: 0.02, max: 0.12, default: 0.06 }
+    fee_pct: { min: 0.00, max: 0.12, default: 0.00 }
+
+- key: food_truck
+  label_it: "Food Truck"
+  label_en: "Food truck"
+  default_dayparts: [Lunch, Afternoon, Dinner]
+  benchmarks:
+    cogs_pct: { min: 0.25, max: 0.40, default: 0.32 }
+    labor_pct: { min: 0.18, max: 0.35, default: 0.25 }
+    opex_pct: { min: 0.05, max: 0.18, default: 0.10 }
+    marketing_pct: { min: 0.01, max: 0.10, default: 0.04 }
+    fee_pct: { min: 0.00, max: 0.10, default: 0.00 }
+
+- key: delivery_kitchen
+  label_it: "Ghost Kitchen / Delivery"
+  label_en: "Ghost kitchen / delivery"
+  default_dayparts: [DeliveryAllDay, Lunch, Dinner]
+  benchmarks:
+    cogs_pct: { min: 0.28, max: 0.45, default: 0.36 }
+    labor_pct: { min: 0.18, max: 0.32, default: 0.24 }
+    opex_pct: { min: 0.08, max: 0.26, default: 0.15 }
+    marketing_pct: { min: 0.03, max: 0.15, default: 0.08 }
+    fee_pct: { min: 0.00, max: 0.15, default: 0.00 }

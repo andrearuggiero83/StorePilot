@@ -1,0 +1,35 @@
+- key: Breakfast
+  label_it: "Colazione"
+  label_en: "Breakfast"
+
+- key: MidMorning
+  label_it: "Metà mattina"
+  label_en: "Mid-morning"
+
+- key: Lunch
+  label_it: "Pranzo"
+  label_en: "Lunch"
+
+- key: Afternoon
+  label_it: "Pomeriggio"
+  label_en: "Afternoon"
+
+- key: Aperitivo
+  label_it: "Aperitivo"
+  label_en: "Aperitif"
+
+- key: Dinner
+  label_it: "Cena"
+  label_en: "Dinner"
+
+- key: LateNight
+  label_it: "Serale"
+  label_en: "Late night"
+
+- key: WeekendBrunch
+  label_it: "Weekend brunch"
+  label_en: "Weekend brunch"
+
+- key: DeliveryAllDay
+  label_it: "Delivery (tutto il giorno)"
+  label_en: "Delivery (all day)"
