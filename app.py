@@ -1000,7 +1000,7 @@ def save_lead_to_google_sheet(payload: Dict[str, Any]):
             "consenso": "true" if privacy_consent else "false",
             "consenso_privacy": "true" if privacy_consent else "false",
             "consenso_marketing": "true" if marketing_consent else "false",
-            "consenso_rev_year": _pick("consenso_rev_year", "kpi_revenue_annual_runrate", default=""),
+            "rev_year": _pick("rev_year", "consenso_rev_year", "kpi_revenue_annual_runrate", default=""),
             "ebitda_year": _pick("ebitda_year", "kpi_ebitda_annual_runrate", default=""),
             "ebitda_pct": _pick("ebitda_pct", "kpi_ebitda_pct_annual_runrate", default=""),
             "break_even_rev_year": _pick("break_even_rev_year", "kpi_break_even_revenue_annual", default=""),
