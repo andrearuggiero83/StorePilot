@@ -523,6 +523,8 @@ I18N = {
         "lead_marketing": "Acconsento a ricevere comunicazioni informative e promozionali relativi a StorePilot, Horeca Code e servizi correlati.",
         "privacy_policy": "Privacy Policy",
         "privacy_policy_cta": "Leggi la Privacy Policy",
+        "terms_of_use_cta": "Leggi i Terms of Use",
+        "about_cta": "About StorePilot",
         "send_pdf_email": "Invia report PDF",
         "send_xlsx_email": "Invia report Excel",
         "lead_local_downloads": "Download locale (secondario)",
@@ -655,6 +657,8 @@ I18N = {
         "lead_marketing": "I agree to receive informational and promotional communications related to StorePilot, Horeca Code, and related services.",
         "privacy_policy": "Privacy Policy",
         "privacy_policy_cta": "Read the Privacy Policy",
+        "terms_of_use_cta": "Read the Terms of Use",
+        "about_cta": "About StorePilot",
         "send_pdf_email": "Send PDF report",
         "send_xlsx_email": "Send Excel report",
         "lead_local_downloads": "Local download (secondary)",
@@ -809,107 +813,127 @@ def _render_privacy_policy_view() -> None:
     lang = st.session_state.get("lang", "IT")
 
     st.title("Privacy Policy - StorePilot")
-    st.caption("Ultimo aggiornamento: 23 febbraio 2026" if lang == "IT" else "Last update: February 23, 2026")
+    st.caption("Ultimo aggiornamento: 9 marzo 2026" if lang == "IT" else "Last updated: March 9, 2026")
 
     if lang == "IT":
         st.markdown(
             f"""
-**1. Titolare del trattamento**  
-Il titolare del trattamento dei dati personali raccolti attraverso questo strumento e StorePilot, progetto digitale operante nel settore food retail.  
-Per qualsiasi richiesta inerente alla privacy e possibile scrivere all'indirizzo: privacy@storepilot.eu
+Questa informativa e allineata ai contenuti pubblicati su **storepilot.eu/privacy**.
 
-**2. Tipologie di dati trattati**  
-I dati personali trattati attraverso StorePilot comprendono:
-- Email fornita dall'utente
-- Localita del progetto inserita dall'utente
-- Parametri di simulazione inseriti dall'utente nel tool
-- KPI generati dal simulatore (es. ricavi, EBITDA, break-even)
-- Timestamp di invio richiesta
-- Origine lead (es. "StorePilot - Horeca Consulting" o altra fonte)
-- Versione del tool utilizzata
-- Flag di consenso (privacy e, se esplicitato, marketing)
+**1. Titolare del trattamento**  
+**StorePilot - progetto software indipendente**, operato da remoto nell'Unione Europea.  
+Contatto privacy: privacy@storepilot.eu
+
+**2. Dati personali trattati**  
+Quando l'utente richiede un report tramite il simulatore, StorePilot puo trattare:
+- indirizzo email;
+- localita del progetto (se inserita);
+- parametri di simulazione e output generati (es. ricavi, EBITDA, break-even);
+- preferenze di consenso (privacy/marketing);
+- data e ora di invio;
+- dati tecnici strettamente necessari a hosting, delivery e sicurezza del servizio.
 
 **3. Finalita del trattamento**  
-I dati personali sono trattati per le seguenti finalita:  
-a) Invio del report richiesto dall'utente tramite il simulatore;  
-b) Invio di comunicazioni informative e commerciali relative ai servizi StorePilot e ad attivita di consulenza correlate, soltanto se l'utente ha prestato consenso esplicito a tale finalita.
+I dati possono essere trattati per:
+- generare e inviare il report richiesto;
+- inviare comunicazioni di servizio collegate al report, inclusa eventuale call to action per prenotare una call di follow-up;
+- registrare lead e report in archivi operativi interni (incluso Google Sheets) per gestione servizio, lead tracking e follow-up;
+- inviare internamente copia delle richieste/report per gestione operativa, analisi e monitoraggio qualita;
+- valutare internamente la rilevanza di una richiesta prima di confermare eventuali call opzionali;
+- manutenzione, monitoraggio e miglioramento funzionale/sicurezza del servizio;
+- invio di comunicazioni informative e promozionali relative a StorePilot, Horeca Code e servizi correlati, solo con consenso separato.
 
-**4. Base giuridica del trattamento**  
-- Per l'invio del report richiesto: esecuzione di una richiesta dell'utente, ai sensi dell'art. 6(1)(b) del GDPR.  
-- Per l'invio di comunicazioni commerciali: consenso espresso dall'interessato, ai sensi dell'art. 6(1)(a) del GDPR.
+**4. Base giuridica (GDPR)**  
+- Art. 6(1)(b): esecuzione del servizio richiesto dall'utente (report e comunicazioni di servizio correlate);
+- Art. 6(1)(f): legittimo interesse per gestione operativa, sicurezza, analisi e qualificazione richieste;
+- Art. 6(1)(a): consenso per comunicazioni marketing opzionali.
 
-**5. Modalita di trattamento e sicurezza**  
-I dati sono trattati con strumenti digitali e automatizzati, adottando misure tecniche e organizzative adeguate per garantire sicurezza, riservatezza e integrita, incluso:
-- accesso limitato e controllato ai dati;
-- uso di credenziali e chiavi sicure lato server;
-- protezione delle comunicazioni;
-- segregazione dei dati in sistemi e servizi protetti.
-I dati non sono sottoposti a processi di decisione automatizzata o profilazione.
+**5. Fornitori terzi / responsabili esterni**  
+StorePilot puo utilizzare servizi terzi, tra cui:
+- Netlify (hosting sito);
+- Streamlit Cloud (hosting applicazione);
+- MailerSend (invio email transazionali/marketing);
+- Squarespace (gestione dominio);
+- Google Sheets / Google Workspace (archivi operativi interni);
+- Calendly o strumenti equivalenti (prenotazione call opzionali).
 
-**6. Periodo di conservazione**  
-- Lead senza consenso marketing: conservati per un massimo di 12 mesi dalla data di raccolta.  
-- Lead con consenso marketing: conservati per un massimo di 24 mesi o fino a revoca del consenso.
+**6. Conservazione dati**  
+I dati sono conservati per il tempo ragionevolmente necessario alle finalita indicate.  
+Lead e report possono essere conservati fino a **24 mesi** per finalita operative, analitiche e follow-up.  
+I dati marketing sono conservati fino a revoca del consenso o fino a quando non sono piu necessari.
 
-**7. Destinatari dei dati / responsabili esterni**  
-I dati possono essere comunicati a soggetti o servizi terzi per le finalita indicate, in qualita di responsabili del trattamento:
-- Streamlit Cloud (hosting e operativita applicativa)
-- MailerSend (servizio di invio email)
-- Google Sheets o servizi analoghi (ove attivati per salvataggio dati)
-- Fornitori di servizi tecnici necessari all'erogazione dell'applicazione
+**7. Diritti dell'interessato**  
+L'utente puo richiedere accesso, rettifica, cancellazione, limitazione o opposizione scrivendo a privacy@storepilot.eu, nei limiti previsti dalla normativa applicabile.
 
-**8. Trasferimenti di dati verso paesi terzi**  
-I dati possono essere trasferiti verso paesi al di fuori dello Spazio Economico Europeo (ad esempio nel caso di utilizzo di servizi cloud internazionali). Tali trasferimenti avvengono nel rispetto delle norme GDPR e con adeguate garanzie (come Standard Contractual Clauses ove applicabili).
+**8. Minori**  
+Il servizio non e rivolto a utenti minori di 16 anni.
 
-**9. Diritti dell'interessato**  
-Gli interessati possono in qualsiasi momento esercitare i diritti garantiti dagli articoli 15-22 del GDPR, tra cui:
-- accesso ai propri dati personali;
-- rettifica o aggiornamento dei dati;
-- cancellazione ("diritto all'oblio");
-- limitazione del trattamento;
-- opposizione al trattamento;
-- portabilita dei dati.
-Le richieste possono essere inviate a privacy@storepilot.eu. L'interessato ha inoltre il diritto di proporre reclamo a un'autorita di controllo.
+**9. Disclaimer**  
+StorePilot fornisce simulazioni economiche illustrative basate su dati inseriti dall'utente. Gli output sono indicativi e non costituiscono consulenza finanziaria, legale, fiscale, di investimento o altra consulenza professionale.
 
-**10. Minori**  
-Il servizio non e pensato ne rivolto a persone di eta inferiore ai 16 anni. Qualora un minore fornisse dati personali, si invita un genitore/tutore a contattare il titolare per richiederne la cancellazione.
-
-**11. Cookie e strumenti di tracciamento**  
-Il tool puo utilizzare cookie tecnici e funzionali necessari al corretto funzionamento della piattaforma (in particolare per Streamlit Cloud). Non vengono utilizzati strumenti di tracciamento pubblicitario o profilazione per finalita di marketing, ne pixel di terze parti per advertising.
-
-**12. Modifiche alla privacy policy**  
-La presente informativa puo essere soggetta ad aggiornamenti. La data dell'ultimo aggiornamento e indicata in testa alla pagina.
+**10. Modifiche**  
+La presente informativa puo essere aggiornata periodicamente; la versione piu recente e sempre disponibile nelle pagine legali ufficiali.
 """
         )
         st.markdown("[← Torna a StorePilot](/)")
     else:
         st.markdown(
             f"""
-**Controller**  
-StorePilot.
+This policy is aligned with the legal pages published on **storepilot.eu/privacy**.
 
-**Data processed**  
-Email, project location, simulation inputs, generated KPIs, timestamp, lead source, tool version.
+**1. Data Controller**  
+**StorePilot - independent software project**, operated remotely within the European Union.  
+Privacy contact: privacy@storepilot.eu
 
-**Purposes & legal basis**  
-Report delivery (GDPR Art. 6(1)(b)); optional follow-up contact with consent (GDPR Art. 6(1)(a)).
+**2. Personal data processed**  
+When users request a report, StorePilot may process:
+- email address;
+- project location (if provided);
+- simulation inputs and generated outputs (e.g. revenue, EBITDA, break-even);
+- consent preferences;
+- submission date/time;
+- technical data strictly required for hosting, delivery, and security.
 
-**Retention**  
-12 months (non-converted leads), 24 months with marketing consent or until withdrawal.
+**3. Processing purposes**  
+Data may be processed to:
+- generate and deliver the requested report;
+- send service communications related to the report, including optional follow-up call invitations;
+- store lead/report data in internal operational records (including Google Sheets);
+- share submitted data internally for operations, analytics, quality monitoring, and follow-up;
+- internally review requests before confirming optional follow-up calls;
+- maintain, monitor, and improve service functionality and security;
+- send informational/promotional communications about StorePilot, Horeca Code, and related services only with separate opt-in consent.
 
-**Processors (if enabled)**  
-Streamlit Cloud, MailerSend, Google Sheets/Drive.
+**4. Legal bases (GDPR)**  
+- Art. 6(1)(b): performance of the requested service;
+- Art. 6(1)(f): legitimate interest (operations, security, analytics, inbound qualification);
+- Art. 6(1)(a): consent for optional marketing communications.
 
-**International transfers**  
-May occur with appropriate GDPR safeguards (including SCC where applicable).
+**5. Third-party providers**  
+StorePilot may rely on:
+- Netlify (website hosting);
+- Streamlit Cloud (app hosting);
+- MailerSend (transactional/marketing email);
+- Squarespace (domain management);
+- Google Sheets / Google Workspace (internal operational records);
+- Calendly or equivalent scheduling tools (optional calls).
 
-**Rights**  
-Access, rectification, erasure, restriction, objection, portability, and complaint to supervisory authority.
+**6. Data retention**  
+Data is retained only as long as reasonably necessary for the stated purposes.  
+Lead/report records may be retained for up to **24 months** for operational, analytical, and follow-up purposes.  
+Marketing data is retained until consent withdrawal or no longer reasonably necessary.
 
-**Privacy contact**  
-privacy@storepilot.eu
+**7. User rights**  
+Users may request access, rectification, deletion, restriction, or objection by contacting privacy@storepilot.eu, subject to applicable law.
 
-**Minors and cookies**  
-Not intended for users under 16. Technical cookies may be used for Streamlit operations. No marketing tracking in this feature unless specifically disclosed.
+**8. Minors**  
+The service is not intended for users under 16.
+
+**9. Disclaimer**  
+StorePilot provides illustrative simulations based on user-provided assumptions. Outputs are indicative only and do not constitute financial, legal, tax, investment, or other professional advice.
+
+**10. Changes**  
+This policy may be updated from time to time. The latest version is always available on the official legal pages.
 """
         )
         st.markdown("[← Back to StorePilot](/)")
@@ -3911,10 +3935,19 @@ with st.container(border=True):
 
     privacy_url = str(_secret_get("privacy_policy_url", "") or "").strip()
     privacy_label = t("privacy_policy_cta")
+    terms_url = str(_secret_get("terms_url", "https://storepilot.eu/terms") or "").strip()
+    about_url = str(_secret_get("about_url", "https://storepilot.eu/about") or "").strip()
     if privacy_url:
         st.markdown(f"[{privacy_label}]({privacy_url})")
     else:
         st.markdown(f"[{privacy_label}](?view=privacy)")
+    legal_links: List[str] = []
+    if terms_url:
+        legal_links.append(f"[{t('terms_of_use_cta')}]({terms_url})")
+    if about_url:
+        legal_links.append(f"[{t('about_cta')}]({about_url})")
+    if legal_links:
+        st.markdown(" · ".join(legal_links))
 
     privacy_ok = st.checkbox(t("lead_privacy"), key="lead_privacy_ok", value=False)
     horeca_code_url = str(_secret_get("horeca_code_url", "https://www.horecacode.com/") or "").strip()
