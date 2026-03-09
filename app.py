@@ -521,7 +521,6 @@ I18N = {
         "lead_location": "Località del progetto",
         "lead_privacy": "Ho letto la Privacy Policy e richiedo l'invio del report (obbligatorio).",
         "lead_marketing": "Acconsento a ricevere comunicazioni informative e promozionali relativi a StorePilot, Horeca Code e servizi correlati.",
-        "horeca_code_link_label": "Scopri Horeca Code",
         "privacy_policy": "Privacy Policy",
         "privacy_policy_cta": "Leggi la Privacy Policy",
         "send_pdf_email": "Invia report PDF",
@@ -654,7 +653,6 @@ I18N = {
         "lead_location": "Project location",
         "lead_privacy": "I have read the Privacy Policy and request the report delivery (required).",
         "lead_marketing": "I agree to receive informational and promotional communications related to StorePilot, Horeca Code, and related services.",
-        "horeca_code_link_label": "Discover Horeca Code",
         "privacy_policy": "Privacy Policy",
         "privacy_policy_cta": "Read the Privacy Policy",
         "send_pdf_email": "Send PDF report",
@@ -3919,14 +3917,11 @@ with st.container(border=True):
         st.markdown(f"[{privacy_label}](?view=privacy)")
 
     privacy_ok = st.checkbox(t("lead_privacy"), key="lead_privacy_ok", value=False)
-    horeca_code_url = str(_secret_get("horeca_code_url", "https://horecacode.com") or "").strip()
+    horeca_code_url = str(_secret_get("horeca_code_url", "https://www.horecacode.com/") or "").strip()
     marketing_label = t("lead_marketing")
     if horeca_code_url:
         marketing_label = marketing_label.replace("Horeca Code", f"[Horeca Code]({horeca_code_url})")
     marketing_ok = st.checkbox(marketing_label, key="lead_marketing_ok", value=False)
-    if horeca_code_url:
-        st.markdown(f"[{t('horeca_code_link_label')}]({horeca_code_url})")
-
     if not ready:
         hint_it = "Per generare il report inserisci almeno 1 fascia con ordini e scontrino (ricavi > 0)."
         hint_en = "To generate the report, enter at least 1 daypart with orders and ticket (revenue > 0)."
