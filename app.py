@@ -531,6 +531,7 @@ I18N = {
         "send_pdf_email": "Invia report PDF",
         "send_xlsx_email": "Invia report Excel",
         "lead_local_downloads": "Download locale (secondario)",
+        "lead_local_downloads_locked": "Disponibile dopo un invio report via email riuscito.",
         "lead_ok_title": "Richiesta registrata",
         "lead_ok_msg": "Il report verrà inviato alla tua mail entro pochi secondi.",
         "lead_missing_email": "Inserisci un'email valida.",
@@ -665,6 +666,7 @@ I18N = {
         "send_pdf_email": "Send PDF report",
         "send_xlsx_email": "Send Excel report",
         "lead_local_downloads": "Local download (secondary)",
+        "lead_local_downloads_locked": "Available after a successful report email delivery.",
         "lead_ok_title": "Request captured",
         "lead_ok_msg": "The report will be sent to your email within a few seconds.",
         "lead_missing_email": "Please enter a valid email.",
@@ -3959,6 +3961,9 @@ with st.container(border=True):
                 st.error(t("lead_send_error"))
 
     st.markdown(f'<div class="sp-minihead">{icon("download")} {t("lead_local_downloads")}</div>', unsafe_allow_html=True)
+    local_download_unlocked = bool(st.session_state.get("_sp_last_lead_payload"))
+    if not local_download_unlocked:
+        st.caption(t("lead_local_downloads_locked"))
     b1, b2 = st.columns(2)
 
     with b1:
@@ -3969,7 +3974,7 @@ with st.container(border=True):
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             type="secondary",
             use_container_width=True,
-            disabled=not bool(xlsx_bytes),
+            disabled=(not bool(xlsx_bytes)) or (not local_download_unlocked),
         )
         if xlsx_err and not xlsx_bytes:
             st.caption(f"Excel: {xlsx_err}")
@@ -3982,7 +3987,7 @@ with st.container(border=True):
             mime="application/pdf",
             type="secondary",
             use_container_width=True,
-            disabled=not bool(pdf_bytes),
+            disabled=(not bool(pdf_bytes)) or (not local_download_unlocked),
         )
         if pdf_err and not pdf_bytes:
             st.caption(f"PDF: {pdf_err}")
