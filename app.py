@@ -925,13 +925,13 @@ def send_email_report(
     report_filename: str,
     report_mime: str,
     payload: Dict[str, Any],
-) -> Tuple[bool, str]:
+) -> Tuple[bool, str, str]:
     tmp_path = None
     try:
         if not to_email.strip():
-            return False, "missing_email"
+            return False, "missing_email", "recipient email missing"
         if not report_bytes:
-            return False, "missing_report"
+            return False, "missing_report", "report attachment missing"
 
         # MailerSend key can come from env or Streamlit secrets.
         api_key = str(_secret_get("mailersend_api_key", "") or "").strip()
@@ -952,9 +952,20 @@ def send_email_report(
             file_path=tmp_path,
             file_type=file_type,
         )
-        return (True, "sent") if bool(result.get("success")) else (False, "email_error")
-    except Exception:
-        return False, "email_error"
+        if bool(result.get("success")):
+            return True, "sent", ""
+
+        status_code = result.get("status_code", 0)
+        response_payload = result.get("response")
+        detail = ""
+        if isinstance(response_payload, dict):
+            detail = str(response_payload.get("message") or response_payload.get("error") or "").strip()
+        if not detail:
+            detail = str(result.get("message", "email_error")).strip()
+        safe_detail = f"status={status_code}; detail={detail}" if detail else f"status={status_code}"
+        return False, "email_error", safe_detail[:240]
+    except Exception as exc:
+        return False, "email_error", f"exception={str(exc)[:180]}"
     finally:
         if tmp_path:
             try:
@@ -3892,7 +3903,7 @@ with st.container(border=True):
                 )
 
                 sheet_ok, _sheet_status = save_to_sheet(lead_payload)
-                email_ok, _email_status = send_email_report(
+                email_ok, _email_status, _email_detail = send_email_report(
                     to_email=str(lead_email).strip(),
                     report_bytes=bytes(selected_bytes),
                     report_filename=selected_name,
@@ -3911,6 +3922,8 @@ with st.container(border=True):
                     st.session_state["_sp_last_lead_payload"] = lead_payload
                 else:
                     st.error(t("lead_send_error"))
+                    if not email_ok and _email_detail:
+                        st.caption(f"Dettaglio email: {_email_detail}")
             except Exception:
                 st.error(t("lead_send_error"))
 
