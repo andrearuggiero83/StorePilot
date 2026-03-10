@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import base64
 from datetime import datetime
+import os
 import re
+import tempfile
 from uuid import uuid4
 
 from typing import Dict, Any, List, Optional, Tuple
@@ -19,6 +21,7 @@ from google.oauth2.service_account import Credentials
 
 from engine.calculations import DaypartInput, calculate_financials
 from engine.feasibility import evaluate_feasibility
+from mail_service import send_storepilot_report
 from reports.report_builder import build_excel_report_bytes, build_pdf_report_bytes
 
 TOOL_VERSION = "2026.02"
@@ -923,19 +926,41 @@ def send_email_report(
     report_mime: str,
     payload: Dict[str, Any],
 ) -> Tuple[bool, str]:
+    tmp_path = None
     try:
-        # Placeholder for MailerSend integration.
-        # Internal copy email is intentionally read only from secrets.
-        _ = to_email
-        _ = report_bytes
-        _ = report_filename
-        _ = report_mime
-        _ = payload
-        _ = _secret_get("mailersend_api_key", "")
-        _ = _secret_get("internal_report_copy_email", "")
-        return True, "ready"
+        if not to_email.strip():
+            return False, "missing_email"
+        if not report_bytes:
+            return False, "missing_report"
+
+        # MailerSend key can come from env or Streamlit secrets.
+        api_key = str(_secret_get("mailersend_api_key", "") or "").strip()
+        if api_key and not os.getenv("MAILERSEND_API_KEY"):
+            os.environ["MAILERSEND_API_KEY"] = api_key
+
+        file_type = "pdf"
+        if report_mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" or report_filename.lower().endswith(".xlsx"):
+            file_type = "excel"
+
+        suffix = ".pdf" if file_type == "pdf" else ".xlsx"
+        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp_file:
+            tmp_file.write(report_bytes)
+            tmp_path = tmp_file.name
+
+        result = send_storepilot_report(
+            user_email=str(to_email).strip(),
+            file_path=tmp_path,
+            file_type=file_type,
+        )
+        return (True, "sent") if bool(result.get("success")) else (False, "email_error")
     except Exception:
         return False, "email_error"
+    finally:
+        if tmp_path:
+            try:
+                os.remove(tmp_path)
+            except Exception:
+                pass
 
 
 def slider_with_free_input(
