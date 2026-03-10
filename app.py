@@ -939,12 +939,19 @@ def send_email_report(
             os.environ["MAILERSEND_API_KEY"] = api_key
         from_email = str(_secret_get("mailersend_from_email", "report@mail.storepilot.eu") or "").strip()
         from_name = str(_secret_get("mailersend_from_name", "StorePilot") or "").strip()
-        bcc_email = str(_secret_get("internal_report_copy_email", "storepilot.eu@gmail.com") or "").strip()
-        if from_email and not os.getenv("MAILERSEND_FROM_EMAIL"):
+        bcc_email = str(
+            _secret_get(
+                "internal_report_copy_email",
+                _secret_get("mailersend_bcc_email", "storepilot.eu@gmail.com"),
+            )
+            or ""
+        ).strip()
+        # Always refresh runtime vars from secrets to avoid stale process-level values.
+        if from_email:
             os.environ["MAILERSEND_FROM_EMAIL"] = from_email
-        if from_name and not os.getenv("MAILERSEND_FROM_NAME"):
+        if from_name:
             os.environ["MAILERSEND_FROM_NAME"] = from_name
-        if bcc_email and not os.getenv("MAILERSEND_BCC_EMAIL"):
+        if bcc_email:
             os.environ["MAILERSEND_BCC_EMAIL"] = bcc_email
 
         file_type = "pdf"
@@ -2361,23 +2368,30 @@ with st.container(border=True):
                 end_t: Optional[str] = None
 
                 if bool(st.session_state.get("use_hourly", False)):
+                    time_options = [""] + [f"{hh:02d}:{mm:02d}" for hh in range(24) for mm in (0, 30)]
+                    cur_start = str(st.session_state.get(f"dp_{dp_key}_start", "") or "").strip()
+                    cur_end = str(st.session_state.get(f"dp_{dp_key}_end", "") or "").strip()
+                    if cur_start not in time_options:
+                        cur_start = ""
+                    if cur_end not in time_options:
+                        cur_end = ""
                     tc1, tc2 = st.columns(2)
                     with tc1:
-                        start_t = st.text_input(
+                        start_t = st.selectbox(
                             t("start_time"),
-                            value=str(st.session_state.get(f"dp_{dp_key}_start", "")),
+                            options=time_options,
+                            index=time_options.index(cur_start),
                             key=f"dp_{dp_key}_start",
                             help=h("start_time"),
-                            placeholder="10:00",
-                        ).strip() or None
+                        ) or None
                     with tc2:
-                        end_t = st.text_input(
+                        end_t = st.selectbox(
                             t("end_time"),
-                            value=str(st.session_state.get(f"dp_{dp_key}_end", "")),
+                            options=time_options,
+                            index=time_options.index(cur_end),
                             key=f"dp_{dp_key}_end",
                             help=h("end_time"),
-                            placeholder="14:00",
-                        ).strip() or None
+                        ) or None
 
                 # Build engine input (robust to different DaypartInput signatures)
                 # The engine reads `dp.orders_per_day` and `dp.ticket_avg`.
@@ -2389,6 +2403,7 @@ with st.container(border=True):
                     # Map of our canonical values
                     values = {
                         "key": dp_key,
+                        "label": dp_label,
                         "orders_per_day": dp_orders,
                         "ticket_avg": dp_ticket,
                         "start_time": start_t,
@@ -2404,6 +2419,7 @@ with st.container(border=True):
                         # Common aliases that might appear in the constructor
                         aliases = {
                             "key": ["key", "daypart_key", "name", "code"],
+                            "label": ["label", "display_label", "title", "description"],
                             "orders_per_day": ["orders_per_day", "orders", "avg_orders", "orders_day"],
                             "ticket_avg": ["ticket_avg", "avg_ticket", "ticket", "avg_scontrino"],
                             "start_time": ["start_time", "start", "from_time"],
@@ -2449,6 +2465,12 @@ with st.container(border=True):
 
                 def _normalize_daypart(dp_obj: Any) -> Any:
                     """Ensure required attributes exist and are not None. Fallback to SimpleNamespace if needed."""
+                    def _safe_float(v: Any, fallback: float) -> float:
+                        try:
+                            return float(v)
+                        except Exception:
+                            return float(fallback)
+
                     key_val = dp_key
                     orders_val = dp_orders
                     ticket_val = dp_ticket
@@ -2460,16 +2482,16 @@ with st.container(border=True):
                             break
 
                     if hasattr(dp_obj, "orders_per_day") and getattr(dp_obj, "orders_per_day") is not None:
-                        orders_val = float(getattr(dp_obj, "orders_per_day"))
+                        orders_val = _safe_float(getattr(dp_obj, "orders_per_day"), dp_orders)
 
                     # Ticket: engine expects ticket_avg
                     if hasattr(dp_obj, "ticket_avg") and getattr(dp_obj, "ticket_avg") is not None:
-                        ticket_val = float(getattr(dp_obj, "ticket_avg"))
+                        ticket_val = _safe_float(getattr(dp_obj, "ticket_avg"), dp_ticket)
                     else:
                         # Try other possible attribute names
                         for t_attr in ("avg_ticket", "ticket"):
                             if hasattr(dp_obj, t_attr) and getattr(dp_obj, t_attr) is not None:
-                                ticket_val = float(getattr(dp_obj, t_attr))
+                                ticket_val = _safe_float(getattr(dp_obj, t_attr), dp_ticket)
                                 break
 
                     # If we can, enforce attributes on the object; otherwise create a compatible fallback
