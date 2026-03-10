@@ -937,6 +937,15 @@ def send_email_report(
         api_key = str(_secret_get("mailersend_api_key", "") or "").strip()
         if api_key and not os.getenv("MAILERSEND_API_KEY"):
             os.environ["MAILERSEND_API_KEY"] = api_key
+        from_email = str(_secret_get("mailersend_from_email", "report@mail.storepilot.eu") or "").strip()
+        from_name = str(_secret_get("mailersend_from_name", "StorePilot") or "").strip()
+        bcc_email = str(_secret_get("internal_report_copy_email", "storepilot.eu@gmail.com") or "").strip()
+        if from_email and not os.getenv("MAILERSEND_FROM_EMAIL"):
+            os.environ["MAILERSEND_FROM_EMAIL"] = from_email
+        if from_name and not os.getenv("MAILERSEND_FROM_NAME"):
+            os.environ["MAILERSEND_FROM_NAME"] = from_name
+        if bcc_email and not os.getenv("MAILERSEND_BCC_EMAIL"):
+            os.environ["MAILERSEND_BCC_EMAIL"] = bcc_email
 
         file_type = "pdf"
         if report_mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" or report_filename.lower().endswith(".xlsx"):

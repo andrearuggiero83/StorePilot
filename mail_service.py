@@ -11,9 +11,12 @@ import requests
 MAILERSEND_API_URL = "https://api.mailersend.com/v1/email"
 MAILERSEND_TIMEOUT_SECONDS = 20
 MAILERSEND_API_KEY_ENV = "MAILERSEND_API_KEY"
+MAILERSEND_FROM_EMAIL_ENV = "MAILERSEND_FROM_EMAIL"
+MAILERSEND_FROM_NAME_ENV = "MAILERSEND_FROM_NAME"
+MAILERSEND_BCC_EMAIL_ENV = "MAILERSEND_BCC_EMAIL"
 
 SENDER_NAME = "StorePilot"
-SENDER_EMAIL = "report@storepilot.eu"
+SENDER_EMAIL = "report@mail.storepilot.eu"
 BCC_EMAIL = "storepilot.eu@gmail.com"
 
 CALENDLY_URL = "https://calendly.com/d/ctpk-y67-vpr"
@@ -156,9 +159,12 @@ def send_storepilot_report(
         }
 
     payload = {
-        "from": {"email": SENDER_EMAIL, "name": SENDER_NAME},
+        "from": {
+            "email": str(os.getenv(MAILERSEND_FROM_EMAIL_ENV, SENDER_EMAIL) or SENDER_EMAIL).strip(),
+            "name": str(os.getenv(MAILERSEND_FROM_NAME_ENV, SENDER_NAME) or SENDER_NAME).strip(),
+        },
         "to": [{"email": str(user_email).strip()}],
-        "bcc": [{"email": BCC_EMAIL}],
+        "bcc": [{"email": str(os.getenv(MAILERSEND_BCC_EMAIL_ENV, BCC_EMAIL) or BCC_EMAIL).strip()}],
         "subject": SUBJECT,
         "text": TEXT_BODY,
         "html": HTML_BODY,
