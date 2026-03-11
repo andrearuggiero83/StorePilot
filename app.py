@@ -1633,6 +1633,14 @@ details[data-testid="stExpander"] div[data-testid="stExpanderDetails"]{
     cursor: help;
     user-select: none;
   }
+  .sp-cost-title .sp-help-inline > summary{
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  .sp-cost-title .sp-help-panel{
+    width: min(320px, 68vw);
+  }
 
   /* KPI cards */
   .sp-metric{
@@ -1823,6 +1831,43 @@ details[data-testid="stExpander"] div[data-testid="stExpanderDetails"]{
     font-size: 13px;
     line-height: 1.45;
   }
+  .sp-fte-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:10px;
+    margin-top:10px;
+  }
+  .sp-fte-card{
+    border:1px solid rgba(16,24,40,0.12);
+    border-radius:14px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(251,248,245,0.98));
+    box-shadow: 0 10px 20px rgba(16,24,40,0.06);
+    padding:10px 12px;
+  }
+  .sp-fte-card-title{
+    font-weight:900;
+    color:var(--sp-text);
+    margin:0 0 8px 0;
+    line-height:1.25;
+  }
+  .sp-fte-kv{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px 10px;
+  }
+  .sp-fte-kv .k{
+    font-size:11px;
+    color:var(--sp-muted2);
+    margin:0 0 2px 0;
+    line-height:1.2;
+  }
+  .sp-fte-kv .v{
+    font-size:15px;
+    font-weight:850;
+    color:var(--sp-text);
+    margin:0;
+    line-height:1.2;
+  }
 
   /* Top utility (language) */
   .sp-topbar{ display:flex; justify-content:flex-end; align-items:center; gap:12px; margin: 6px 0 14px 0; }
@@ -1904,10 +1949,9 @@ def cost_block_pct_or_eur(
     key_prefix: str,
     help_text: str = "",
 ) -> Tuple[str, float, float]:
-    help_attr = _html_escape(help_text or "")
-    dot = f'<span class="sp-help-dot" title="{help_attr}">?</span>' if help_attr else ""
+    dot = _help_inline_html(help_text) if help_text else ""
     st.markdown(
-        f'<div class="sp-cost-title">{title}{dot}</div>',
+        f'<div class="sp-cost-title"><span>{_html_escape(title)}</span>{dot}</div>',
         unsafe_allow_html=True,
     )
 
@@ -2646,6 +2690,25 @@ minihead_with_help(
 with st.expander(" ", expanded=False):
     st.checkbox(t("invest_enable"), key="inv_enable", help=h("invest_enable"))
     if bool(st.session_state.get("inv_enable", False)):
+        with st.expander(
+            "Guida rapida investimenti" if st.session_state.get("lang", "IT") == "IT" else "Quick investments guide",
+            expanded=False,
+        ):
+            st.markdown(
+                (
+                    "- **Capex**: lavori, arredi e attrezzature iniziali (one-off).\n"
+                    "- **Depositi/Garanzie**: cassa vincolata, non costo operativo ricorrente.\n"
+                    "- **ROI/Payback**: qui sono proxy operativi su EBITDA (non includono leva finanziaria, imposte o valore residuo).\n"
+                    "- Mantieni ipotesi prudenziali e confronta più scenari."
+                )
+                if st.session_state.get("lang", "IT") == "IT"
+                else (
+                    "- **Capex**: initial fit-out, furniture and equipment (one-off).\n"
+                    "- **Deposits/Guarantees**: cash locked, not recurring operating cost.\n"
+                    "- **ROI/Payback**: here they are EBITDA-based operating proxies (no leverage, taxes, or terminal value).\n"
+                    "- Keep assumptions conservative and compare multiple scenarios."
+                )
+            )
         st.caption(
             "Suggerimento: usa valori prudenziali e considera che ROI/payback qui sono una stima operativa (proxy su EBITDA)."
             if st.session_state.get("lang", "IT") == "IT"
@@ -2705,6 +2768,25 @@ minihead_with_help(
 with st.expander(" ", expanded=False):
     st.checkbox(t("season_enable"), key="ramp_enable", help=h("season_enable"))
     if bool(st.session_state.get("ramp_enable", False)):
+        with st.expander(
+            "Guida rapida stagionalità & avviamento" if st.session_state.get("lang", "IT") == "IT" else "Quick seasonality & ramp-up guide",
+            expanded=False,
+        ):
+            st.markdown(
+                (
+                    "- I pesi trimestrali (**Q1-Q4**) dovrebbero sommare circa **100%**.\n"
+                    "- **Mesi avviamento**: durata della salita verso il 100% run-rate.\n"
+                    "- **Livello mese 1**: punto di partenza (es. 65% = partenza prudente).\n"
+                    "- Località turistiche: spesso Q2/Q3 più alti; format invernali: Q4/Q1 più alti."
+                )
+                if st.session_state.get("lang", "IT") == "IT"
+                else (
+                    "- Quarter weights (**Q1-Q4**) should total around **100%**.\n"
+                    "- **Ramp-up months**: duration needed to reach 100% run-rate.\n"
+                    "- **Month-1 level**: starting level (e.g., 65% = conservative start).\n"
+                    "- Tourist locations often have higher Q2/Q3; winter formats higher Q4/Q1."
+                )
+            )
         st.caption(
             "Esempio: Q2/Q3 più alti per località turistiche; ramp-up 3-6 mesi per nuove aperture."
             if st.session_state.get("lang", "IT") == "IT"
@@ -2753,6 +2835,27 @@ minihead_with_help(
 with st.expander(" ", expanded=False):
     st.checkbox(t("fte_enable"), key="fte_enable", help=h("fte_enable"))
     if bool(st.session_state.get("fte_enable", False)):
+        with st.expander(
+            "Guida rapida FTE" if st.session_state.get("lang", "IT") == "IT" else "Quick FTE guide",
+            expanded=False,
+        ):
+            st.markdown(
+                (
+                    "- **Metodo m1**: usa il costo personale del modello (più aderente se hai dati reali).\n"
+                    "- **Metodo m2**: parte da % target sui ricavi (utile in previsionale).\n"
+                    "- **Costo orario**: inserisci un valore all-in (lordo + contributi + extra).\n"
+                    "- **Ore/FTE**: influenza direttamente il numero FTE (meno ore/FTE => più FTE).\n"
+                    "- La ripartizione per fascia alloca costi/ore in base alla quota ricavi della fascia."
+                )
+                if st.session_state.get("lang", "IT") == "IT"
+                else (
+                    "- **Method m1**: uses labor cost already computed by the model (best when you have real data).\n"
+                    "- **Method m2**: starts from target labor % on revenue (useful in forecasting).\n"
+                    "- **Hourly cost**: use an all-in value (gross + contributions + extras).\n"
+                    "- **Hours/FTE** directly changes total FTE (lower hours/FTE => higher FTE).\n"
+                    "- Daypart split allocates labor costs/hours by each daypart revenue share."
+                )
+            )
         st.session_state.setdefault("fte_method", "m1")
         st.radio(
             t("fte_method"),
@@ -2985,6 +3088,38 @@ def _fmt_months(v: Any) -> str:
         return t("na")
     suffix = "mesi" if st.session_state.get("lang", "IT") == "IT" else "months"
     return f"{x:.1f} {suffix}"
+
+
+def _render_fte_daypart_cards(rows: List[Dict[str, Any]]) -> None:
+    if not rows:
+        return
+    lang_it = st.session_state.get("lang", "IT") == "IT"
+    l_share = "Quota ricavi" if lang_it else "Revenue share"
+    l_cost = "Costo annuo allocato" if lang_it else "Allocated annual cost"
+    l_hours = "Ore annue allocate" if lang_it else "Allocated annual hours"
+    l_fte = "FTE fascia" if lang_it else "Daypart FTE"
+    l_heads = "FTE medi in fascia" if lang_it else "Avg FTE on shift"
+
+    cards: List[str] = []
+    for row in rows:
+        hours_txt = f"{float(row.get('hours_annual', 0.0)):,.0f}".replace(",", ".")
+        avg = row.get("avg_on_shift")
+        avg_txt = f"{float(avg):.2f}" if isinstance(avg, (int, float)) else t("na")
+        cards.append(
+            f"""
+<div class="sp-fte-card">
+  <div class="sp-fte-card-title">{_html_escape(str(row.get("label", "")))}</div>
+  <div class="sp-fte-kv">
+    <div><div class="k">{_html_escape(l_share)}</div><div class="v">{_fmt_pct(row.get("share"))}</div></div>
+    <div><div class="k">{_html_escape(l_fte)}</div><div class="v">{float(row.get("fte", 0.0)):.2f}</div></div>
+    <div><div class="k">{_html_escape(l_cost)}</div><div class="v">{_fmt_eur(row.get("cost_annual"))}</div></div>
+    <div><div class="k">{_html_escape(l_heads)}</div><div class="v">{_html_escape(avg_txt)}</div></div>
+    <div><div class="k">{_html_escape(l_hours)}</div><div class="v">{_html_escape(hours_txt)}</div></div>
+  </div>
+</div>
+""".strip()
+        )
+    st.markdown(f'<div class="sp-fte-grid">{"".join(cards)}</div>', unsafe_allow_html=True)
 
 
 seasonality_enabled = bool(st.session_state.get("ramp_enable", False))
@@ -3402,22 +3537,27 @@ with st.container(border=True):
 
         if fte_daypart_rows:
             st.markdown(f"**{t('dp_staff_split')}**")
-            h1, h2, h3, h4, h5, h6 = st.columns([2.2, 1.1, 1.4, 1.3, 0.9, 1.1])
-            h1.markdown(f"**{t('dayparts')}**")
-            h2.markdown(f"**{t('dp_staff_share')}**")
-            h3.markdown(f"**{t('dp_staff_cost')}**")
-            h4.markdown(f"**{t('dp_staff_hours')}**")
-            h5.markdown(f"**{t('dp_staff_fte')}**")
-            h6.markdown(f"**{t('dp_staff_heads')}**")
+            _render_fte_daypart_cards(fte_daypart_rows)
+            with st.expander(
+                "Dettaglio tabellare" if st.session_state.get("lang", "IT") == "IT" else "Tabular detail",
+                expanded=False,
+            ):
+                h1, h2, h3, h4, h5, h6 = st.columns([2.2, 1.1, 1.4, 1.3, 0.9, 1.1])
+                h1.markdown(f"**{t('dayparts')}**")
+                h2.markdown(f"**{t('dp_staff_share')}**")
+                h3.markdown(f"**{t('dp_staff_cost')}**")
+                h4.markdown(f"**{t('dp_staff_hours')}**")
+                h5.markdown(f"**{t('dp_staff_fte')}**")
+                h6.markdown(f"**{t('dp_staff_heads')}**")
 
-            for row in fte_daypart_rows:
-                c1r, c2r, c3r, c4r, c5r, c6r = st.columns([2.2, 1.1, 1.4, 1.3, 0.9, 1.1])
-                c1r.write(row["label"])
-                c2r.write(_fmt_pct(row["share"]))
-                c3r.write(_fmt_eur(row["cost_annual"]))
-                c4r.write(f"{row['hours_annual']:,.0f}".replace(",", "."))
-                c5r.write(f"{row['fte']:.2f}")
-                c6r.write(f"{row['avg_on_shift']:.2f}" if isinstance(row["avg_on_shift"], (int, float)) else t("na"))
+                for row in fte_daypart_rows:
+                    c1r, c2r, c3r, c4r, c5r, c6r = st.columns([2.2, 1.1, 1.4, 1.3, 0.9, 1.1])
+                    c1r.write(row["label"])
+                    c2r.write(_fmt_pct(row["share"]))
+                    c3r.write(_fmt_eur(row["cost_annual"]))
+                    c4r.write(f"{row['hours_annual']:,.0f}".replace(",", "."))
+                    c5r.write(f"{row['fte']:.2f}")
+                    c6r.write(f"{row['avg_on_shift']:.2f}" if isinstance(row["avg_on_shift"], (int, float)) else t("na"))
 
     # Assessment (visual scorecards)
     st.markdown('<div class="sp-divider"></div>', unsafe_allow_html=True)
