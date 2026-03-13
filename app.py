@@ -1868,6 +1868,47 @@ details[data-testid="stExpander"] div[data-testid="stExpanderDetails"]{
     margin:0;
     line-height:1.2;
   }
+  .sp-table-wrap{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:4px;
+  }
+  .sp-detail-table{
+    width:100%;
+    min-width:760px;
+    border-collapse:separate;
+    border-spacing:0;
+    margin-top:8px;
+    font-size:14px;
+  }
+  .sp-detail-table thead th{
+    position:sticky;
+    top:0;
+    z-index:1;
+    text-align:left;
+    background:rgba(247,241,236,0.98);
+    color:var(--sp-text);
+    font-weight:900;
+    padding:10px 12px;
+    border-bottom:1px solid rgba(16,24,40,0.10);
+    white-space:nowrap;
+  }
+  .sp-detail-table tbody td{
+    padding:10px 12px;
+    border-bottom:1px solid rgba(16,24,40,0.08);
+    color:var(--sp-text);
+    vertical-align:top;
+    white-space:nowrap;
+  }
+  .sp-detail-table tbody tr:nth-child(even) td{
+    background:rgba(255,255,255,0.50);
+  }
+  .sp-table-hint{
+    margin:4px 0 0 0;
+    font-size:12px;
+    color:var(--sp-muted2);
+  }
 
   /* Top utility (language) */
   .sp-topbar{ display:flex; justify-content:flex-end; align-items:center; gap:12px; margin: 6px 0 14px 0; }
@@ -3131,6 +3172,54 @@ def _render_fte_daypart_cards(rows: List[Dict[str, Any]]) -> None:
     st.markdown(f'<div class="sp-fte-grid">{"".join(cards)}</div>', unsafe_allow_html=True)
 
 
+def _render_fte_daypart_table(rows: List[Dict[str, Any]]) -> None:
+    if not rows:
+        return
+    headers = [
+        t("dayparts"),
+        t("dp_staff_share"),
+        t("dp_staff_cost"),
+        t("dp_staff_hours"),
+        t("dp_staff_fte"),
+        t("dp_staff_heads"),
+    ]
+    body_rows: List[str] = []
+    for row in rows:
+        hours_txt = f"{row['hours_annual']:,.0f}".replace(",", ".")
+        fte_txt = f"{row['fte']:.2f}"
+        heads_txt = f"{row['avg_on_shift']:.2f}" if isinstance(row["avg_on_shift"], (int, float)) else t("na")
+        body_rows.append(
+            "".join(
+                [
+                    "<tr>",
+                    f"<td>{_html_escape(str(row['label']))}</td>",
+                    f"<td>{_html_escape(_fmt_pct(row['share']))}</td>",
+                    f"<td>{_html_escape(_fmt_eur(row['cost_annual']))}</td>",
+                    f"<td>{_html_escape(hours_txt)}</td>",
+                    f"<td>{_html_escape(fte_txt)}</td>",
+                    f"<td>{_html_escape(heads_txt)}</td>",
+                    "</tr>",
+                ]
+            )
+        )
+
+    thead = "".join(f"<th>{_html_escape(h)}</th>" for h in headers)
+    hint = (
+        "Scorri orizzontalmente per vedere tutte le colonne."
+        if st.session_state.get("lang", "IT") == "IT"
+        else "Scroll horizontally to view all columns."
+    )
+    st.markdown(
+        (
+            '<div class="sp-table-wrap">'
+            f'<table class="sp-detail-table"><thead><tr>{thead}</tr></thead><tbody>{"".join(body_rows)}</tbody></table>'
+            "</div>"
+            f'<p class="sp-table-hint">{_html_escape(hint)}</p>'
+        ),
+        unsafe_allow_html=True,
+    )
+
+
 seasonality_enabled = bool(st.session_state.get("ramp_enable", False))
 invest_enabled = bool(st.session_state.get("inv_enable", False))
 fte_enabled = bool(st.session_state.get("fte_enable", False))
@@ -3551,22 +3640,7 @@ with st.container(border=True):
                 "Dettaglio tabellare" if st.session_state.get("lang", "IT") == "IT" else "Tabular detail",
                 expanded=False,
             ):
-                h1, h2, h3, h4, h5, h6 = st.columns([2.2, 1.1, 1.4, 1.3, 0.9, 1.1])
-                h1.markdown(f"**{t('dayparts')}**")
-                h2.markdown(f"**{t('dp_staff_share')}**")
-                h3.markdown(f"**{t('dp_staff_cost')}**")
-                h4.markdown(f"**{t('dp_staff_hours')}**")
-                h5.markdown(f"**{t('dp_staff_fte')}**")
-                h6.markdown(f"**{t('dp_staff_heads')}**")
-
-                for row in fte_daypart_rows:
-                    c1r, c2r, c3r, c4r, c5r, c6r = st.columns([2.2, 1.1, 1.4, 1.3, 0.9, 1.1])
-                    c1r.write(row["label"])
-                    c2r.write(_fmt_pct(row["share"]))
-                    c3r.write(_fmt_eur(row["cost_annual"]))
-                    c4r.write(f"{row['hours_annual']:,.0f}".replace(",", "."))
-                    c5r.write(f"{row['fte']:.2f}")
-                    c6r.write(f"{row['avg_on_shift']:.2f}" if isinstance(row["avg_on_shift"], (int, float)) else t("na"))
+                _render_fte_daypart_table(fte_daypart_rows)
 
     # Assessment (visual scorecards)
     st.markdown('<div class="sp-divider"></div>', unsafe_allow_html=True)
