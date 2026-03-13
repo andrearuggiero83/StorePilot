@@ -2066,14 +2066,20 @@ st.session_state.setdefault("fte_target_inc", 30.0)
 logo_uri = _img_data_uri("assets/logo.png")
 logo_html = f'<img src="{logo_uri}" class="sp-hero-logo" alt="StorePilot" />' if logo_uri else ""
 
-# Short description
+# Hero copy
+hero_title_it = "Simula la sostenibilità economica del tuo locale"
+hero_title_en = "Simulate the economic sustainability of your venue"
+hero_title = hero_title_it if st.session_state.get("lang", "IT") == "IT" else hero_title_en
+
 hero_desc_it = (
-    "<strong>StorePilot</strong> è il simulatore economico che trasforma in pochi secondi ordini, scontrino medio e costi in "
-    "<strong>ricavi, EBITDA e break-even</strong>."
+    "<strong>StorePilot</strong> è il simulatore economico per ristorazione e food retail che trasforma in pochi secondi "
+    "ordini, scontrino medio e costi in <strong>ricavi, EBITDA e break-even</strong>. "
+    "Utile sia per validare un nuovo progetto, sia per stressare i margini di un business già operativo."
 )
 hero_desc_en = (
-    "<strong>StorePilot</strong> is an economic simulator for food retail locations. "
-    "It turns orders, average ticket and costs into <strong>revenue, EBITDA and break-even</strong> in seconds."
+    "<strong>StorePilot</strong> is the economic simulator for restaurant and food retail businesses that turns orders, "
+    "average ticket and costs into <strong>revenue, EBITDA and break-even</strong> in seconds. "
+    "Useful both to validate a new project and to stress-test the margins of an existing business."
 )
 hero_desc = hero_desc_it if st.session_state.get("lang", "IT") == "IT" else hero_desc_en
 
@@ -2083,10 +2089,13 @@ st.markdown(
   <div class="sp-hero-inner">
     {logo_html}
     <div class="sp-hero-copy">
-      <p class="sub">Measure twice. Sign once.</p>
       <p class="payoff">Simula • Valuta • Decidi</p>
+      <p class="sub">{hero_title}</p>
       <p style="margin-top:10px;font-size:15px;line-height:1.5;color:#eaeaea;font-weight:520;">
         {hero_desc}
+      </p>
+      <p style="margin:6px 0 0 0;font-size:13px;color:#cfcfcf;font-weight:800;letter-spacing:0.2px;">
+        Measure twice. Sign once.
       </p>
     </div>
   </div>
