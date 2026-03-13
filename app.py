@@ -193,6 +193,7 @@ def _plotly_base_layout(fig: go.Figure) -> go.Figure:
         margin=dict(l=34, r=22, t=34, b=36),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
+        dragmode=False,
         font=dict(
             family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial",
             size=12,
@@ -213,6 +214,17 @@ def _plotly_base_layout(fig: go.Figure) -> go.Figure:
     fig.update_yaxes(showgrid=True, gridcolor="rgba(16,24,40,0.08)", zeroline=False)
 
     return fig
+
+
+def _plotly_mobile_config() -> Dict[str, Any]:
+    return {
+        "displayModeBar": False,
+        "displaylogo": False,
+        "scrollZoom": False,
+        "doubleClick": False,
+        "showTips": False,
+        "responsive": True,
+    }
 
 
 # Backward-compatible alias (older code may call this name)
@@ -1908,6 +1920,12 @@ details[data-testid="stExpander"] div[data-testid="stExpanderDetails"]{
     margin:4px 0 0 0;
     font-size:12px;
     color:var(--sp-muted2);
+  }
+  .js-plotly-plot,
+  .js-plotly-plot .plotly,
+  .js-plotly-plot .plot-container,
+  .js-plotly-plot .svg-container{
+    touch-action: pan-y !important;
   }
 
   /* Top utility (language) */
@@ -4012,6 +4030,7 @@ with st.container(border=True):
     # Render
     # =========================================================
     c1, c2 = st.columns(2)
+    chart_config = _plotly_mobile_config()
     with c1:
         _chart_title_with_help(
             t("rev_margin"),
@@ -4020,7 +4039,7 @@ with st.container(border=True):
             "Revenue -> EBITDA: start from annual revenue; each negative bar subtracts a cost. "
             "The last bar shows final EBITDA.",
         )
-        st.plotly_chart(fig_wf, use_container_width=True, key="chart_rev_margin")
+        st.plotly_chart(fig_wf, use_container_width=True, key="chart_rev_margin", config=chart_config)
     with c2:
         _chart_title_with_help(
             t("be_curve"),
@@ -4029,7 +4048,7 @@ with st.container(border=True):
             "Break-even point: where revenue and total costs intersect. "
             "Below that level EBITDA is negative, above it positive.",
         )
-        st.plotly_chart(fig_be, use_container_width=True, key="chart_break_even")
+        st.plotly_chart(fig_be, use_container_width=True, key="chart_break_even", config=chart_config)
 
     c3, c4 = st.columns(2)
     with c3:
@@ -4038,14 +4057,14 @@ with st.container(border=True):
             "Mix costi annui: ogni fetta rappresenta una categoria di costo e la sua incidenza sul totale.",
             "Annual cost mix: each slice is a cost category and its share of total costs.",
         )
-        st.plotly_chart(fig_pie, use_container_width=True, key="chart_cost_pie")
+        st.plotly_chart(fig_pie, use_container_width=True, key="chart_cost_pie", config=chart_config)
     with c4:
         _chart_title_with_help(
             t("daypart_breakdown"),
             "Ricavi per fascia: confronta il contributo mensile stimato di ciascuna fascia oraria.",
             "Revenue by daypart: compares estimated monthly contribution of each daypart.",
         )
-        st.plotly_chart(fig_dp, use_container_width=True, key="chart_daypart_breakdown")
+        st.plotly_chart(fig_dp, use_container_width=True, key="chart_daypart_breakdown", config=chart_config)
 
     # Store values
     st.session_state["_sp_rev_year"] = rev_year
