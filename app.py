@@ -530,6 +530,12 @@ I18N = {
         "download_xlsx": "Scarica report Excel",
         "download_pdf": "Scarica report PDF",
         "report_caption": "File pronto da condividere (KPI + grafici principali).",
+        "report_value_title": "Ricevi l’analisi completa del tuo progetto",
+        "report_value_subtitle": "Il report organizza la simulazione in modo più chiaro e ti aiuta a leggere punti di forza, fragilità e sostenibilità del modello.",
+        "report_value_b1": "sintesi chiara del modello economico simulato",
+        "report_value_b2": "scenari alternativi e sensibilità dei margini",
+        "report_value_b3": "break-even e sostenibilità del progetto",
+        "report_value_b4": "report utile da condividere con soci o advisor",
         "report_email_primary": "Invio report via email",
         "report_email_caption": "Ricevi il report direttamente nella tua casella email.",
         "lead_email": "Email",
@@ -540,8 +546,9 @@ I18N = {
         "privacy_policy_cta": "Privacy Policy",
         "terms_of_use_cta": "Terms",
         "about_cta": "About",
-        "send_pdf_email": "Invia report PDF",
+        "send_pdf_email": "Ricevi il report via email",
         "send_xlsx_email": "Invia report Excel",
+        "lead_microcopy": "Report PDF generato automaticamente in pochi secondi.",
         "lead_local_downloads": "Download locale (secondario)",
         "lead_local_downloads_locked": "Disponibile dopo un invio report via email riuscito.",
         "lead_ok_title": "Richiesta registrata",
@@ -665,6 +672,12 @@ I18N = {
         "download_xlsx": "Download Excel report",
         "download_pdf": "Download PDF report",
         "report_caption": "Share-ready file (KPIs + key charts).",
+        "report_value_title": "Receive the complete analysis of your project",
+        "report_value_subtitle": "The report organizes the simulation more clearly and helps you read strengths, fragilities, and sustainability of the model.",
+        "report_value_b1": "clear summary of the simulated economic model",
+        "report_value_b2": "alternative scenarios and margin sensitivity",
+        "report_value_b3": "break-even and project sustainability",
+        "report_value_b4": "a report useful to share with partners or advisors",
         "report_email_primary": "Email report delivery",
         "report_email_caption": "Receive the report directly in your inbox.",
         "lead_email": "Email",
@@ -675,8 +688,9 @@ I18N = {
         "privacy_policy_cta": "Privacy Policy",
         "terms_of_use_cta": "Terms",
         "about_cta": "About",
-        "send_pdf_email": "Send PDF report",
+        "send_pdf_email": "Receive the report by email",
         "send_xlsx_email": "Send Excel report",
+        "lead_microcopy": "PDF report generated automatically in a few seconds.",
         "lead_local_downloads": "Local download (secondary)",
         "lead_local_downloads_locked": "Available after a successful report email delivery.",
         "lead_ok_title": "Request captured",
@@ -1926,6 +1940,80 @@ details[data-testid="stExpander"] div[data-testid="stExpanderDetails"]{
   .js-plotly-plot .plot-container,
   .js-plotly-plot .svg-container{
     touch-action: pan-y !important;
+  }
+  .sp-report-card{
+    border:1px solid rgba(16,24,40,0.10);
+    border-radius:22px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(249,244,240,0.98));
+    box-shadow: 0 18px 36px rgba(16,24,40,0.08);
+    padding:18px 18px 16px 18px;
+    margin:10px 0 16px 0;
+  }
+  .sp-report-card h3{
+    margin:0 0 8px 0;
+    font-size:24px;
+    line-height:1.15;
+    color:var(--sp-text);
+    font-weight:950;
+    letter-spacing:-0.3px;
+  }
+  .sp-report-sub{
+    margin:0;
+    color:var(--sp-muted2);
+    font-size:15px;
+    line-height:1.55;
+    max-width:860px;
+  }
+  .sp-report-preview{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+    gap:10px 12px;
+    margin:14px 0 4px 0;
+  }
+  .sp-report-item{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    padding:12px 13px;
+    border-radius:16px;
+    border:1px solid rgba(16,24,40,0.08);
+    background:rgba(255,255,255,0.76);
+  }
+  .sp-report-item::before{
+    content:"";
+    width:10px;
+    height:10px;
+    border-radius:999px;
+    margin-top:5px;
+    flex:0 0 auto;
+    background: linear-gradient(180deg, rgba(184,149,129,1), rgba(145,119,107,1));
+    box-shadow: 0 0 0 4px rgba(184,149,129,0.12);
+  }
+  .sp-report-item span{
+    color:var(--sp-text);
+    font-size:14px;
+    line-height:1.45;
+    font-weight:700;
+  }
+  .sp-report-actions{
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid rgba(16,24,40,0.08);
+  }
+  .sp-report-legal{
+    margin:8px 0 10px 0;
+    font-size:13px;
+  }
+  .sp-report-micro{
+    margin:8px 0 0 0;
+    color:var(--sp-muted2);
+    font-size:12px;
+    line-height:1.45;
+  }
+  @media (max-width: 860px){
+    .sp-report-card{ padding:16px 14px 14px 14px; border-radius:18px; }
+    .sp-report-card h3{ font-size:21px; }
+    .sp-report-preview{ grid-template-columns:1fr; }
   }
 
   /* Top utility (language) */
@@ -4093,8 +4181,26 @@ with st.container(border=True):
     report_stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     lang = st.session_state.get("lang", "IT")
 
-    st.markdown(f'<div class="sp-minihead">{icon("email")} {t("report_email_primary")}</div>', unsafe_allow_html=True)
-    st.caption(t("report_email_caption"))
+    preview_items = [
+        t("report_value_b1"),
+        t("report_value_b2"),
+        t("report_value_b3"),
+        t("report_value_b4"),
+    ]
+    preview_html = "".join(
+        f'<div class="sp-report-item"><span>{_html_escape(item)}</span></div>'
+        for item in preview_items
+    )
+    st.markdown(
+        f"""
+<div class="sp-report-card">
+  <h3>{_html_escape(t("report_value_title"))}</h3>
+  <p class="sp-report-sub">{_html_escape(t("report_value_subtitle"))}</p>
+  <div class="sp-report-preview">{preview_html}</div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 
     lead_col1, lead_col2 = st.columns(2)
     with lead_col1:
@@ -4108,13 +4214,13 @@ with st.container(border=True):
     about_url = str(_secret_get("about_url", "https://storepilot.eu/about") or "").strip()
     legal_links: List[str] = []
     if privacy_url:
-        legal_links.append(f"[{privacy_label}]({privacy_url})")
+        legal_links.append(f'<a href="{_html_escape(privacy_url)}" target="_blank" rel="noopener noreferrer">{_html_escape(privacy_label)}</a>')
     if terms_url:
-        legal_links.append(f"[{t('terms_of_use_cta')}]({terms_url})")
+        legal_links.append(f'<a href="{_html_escape(terms_url)}" target="_blank" rel="noopener noreferrer">{_html_escape(t("terms_of_use_cta"))}</a>')
     if about_url:
-        legal_links.append(f"[{t('about_cta')}]({about_url})")
+        legal_links.append(f'<a href="{_html_escape(about_url)}" target="_blank" rel="noopener noreferrer">{_html_escape(t("about_cta"))}</a>')
     if legal_links:
-        st.markdown(" · ".join(legal_links))
+        st.markdown(f'<div class="sp-report-legal">{" · ".join(legal_links)}</div>', unsafe_allow_html=True)
 
     privacy_ok = st.checkbox(t("lead_privacy"), key="lead_privacy_ok", value=False)
     horeca_code_url = str(_secret_get("horeca_code_url", "https://www.horecacode.com/") or "").strip()
@@ -4127,25 +4233,16 @@ with st.container(border=True):
         hint_en = "To generate the report, enter at least 1 daypart with orders and ticket (revenue > 0)."
         premium_info(hint_it if lang == "IT" else hint_en)
 
-    send_c1, send_c2 = st.columns(2)
-    with send_c1:
-        send_pdf_clicked = st.button(
-            t("send_pdf_email"),
-            type="primary",
-            use_container_width=True,
-            disabled=(not bool(pdf_bytes)) or (not privacy_ok),
-            key="send_pdf_email_btn",
-        )
-    with send_c2:
-        send_xlsx_clicked = st.button(
-            t("send_xlsx_email"),
-            type="primary",
-            use_container_width=True,
-            disabled=(not bool(xlsx_bytes)) or (not privacy_ok),
-            key="send_xlsx_email_btn",
-        )
+    send_pdf_clicked = st.button(
+        t("send_pdf_email"),
+        type="primary",
+        use_container_width=True,
+        disabled=(not bool(pdf_bytes)) or (not privacy_ok),
+        key="send_pdf_email_btn",
+    )
+    st.markdown(f'<p class="sp-report-micro">{_html_escape(t("lead_microcopy"))}</p>', unsafe_allow_html=True)
 
-    if send_pdf_clicked or send_xlsx_clicked:
+    if send_pdf_clicked:
         errors: List[str] = []
         if not _is_valid_email(lead_email):
             errors.append(t("lead_missing_email"))
@@ -4154,10 +4251,10 @@ with st.container(border=True):
         if not privacy_ok:
             errors.append(t("lead_missing_privacy"))
 
-        selected_fmt = "pdf" if send_pdf_clicked else "xlsx"
-        selected_bytes = pdf_bytes if selected_fmt == "pdf" else xlsx_bytes
-        selected_mime = "application/pdf" if selected_fmt == "pdf" else "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        selected_name = f"StorePilot_Report_{report_stamp}.{selected_fmt}"
+        selected_fmt = "pdf"
+        selected_bytes = pdf_bytes
+        selected_mime = "application/pdf"
+        selected_name = f"StorePilot_Report_{report_stamp}.pdf"
 
         if not selected_bytes:
             errors.append(t("lead_missing_report"))
