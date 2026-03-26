@@ -19,7 +19,7 @@ SENDER_NAME = "StorePilot"
 SENDER_EMAIL = "report@mail.storepilot.eu"
 BCC_EMAIL = "storepilot.eu@gmail.com"
 
-CALENDLY_URL = "https://calendly.com/d/ctpk-y67-vpr"
+BOOKING_URL = "https://cal.eu/andrea.ruggiero/sessione-di-confronto-strategico"
 
 SUBJECT = "StorePilot — il tuo report è pronto"
 TEXT_BODY = f"""Ciao,
@@ -32,7 +32,7 @@ La vera differenza sta nella loro interpretazione e nella capacità di trasforma
 Se vuoi analizzare insieme i risultati della simulazione e verificare le ipotesi del modello, puoi prenotare una breve sessione di confronto strategico.
 
 Prenota qui la tua sessione:
-{CALENDLY_URL}
+{BOOKING_URL}
 
 A presto,
 StorePilot™
@@ -64,7 +64,7 @@ HTML_BODY = f"""<!doctype html>
                   puoi prenotare una breve sessione di confronto strategico.
                 </p>
                 <p style="margin:0 0 24px;">
-                  <a href="{CALENDLY_URL}" style="display:inline-block;background:#111827;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:8px;font-weight:700;">
+                  <a href="{BOOKING_URL}" style="display:inline-block;background:#111827;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:8px;font-weight:700;">
                     Prenota qui la tua sessione
                   </a>
                 </p>

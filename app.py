@@ -3156,6 +3156,8 @@ _reports_payload: Dict[str, Any] = {
 
 if _can_build_reports:
     _report_dayparts: List[Dict[str, Any]] = []
+    _report_orders_day = 0.0
+    _report_daily_revenue = 0.0
     _open_days_report = int(st.session_state.get("open_days", 30) or 30)
     for _dp in daypart_inputs:
         try:
@@ -3167,6 +3169,8 @@ if _can_build_reports:
             _label = label_daypart(_dp_obj)
             _orders = float(getattr(_dp, "orders_per_day", 0.0) or 0.0)
             _ticket = float(getattr(_dp, "ticket_avg", 0.0) or 0.0)
+            _report_orders_day += max(0.0, _orders)
+            _report_daily_revenue += max(0.0, _orders * _ticket)
             _monthly = max(0.0, _orders * _ticket * _open_days_report)
             if _monthly > 0:
                 _report_dayparts.append({"label": _label, "monthly_revenue": _monthly})
@@ -3177,6 +3181,8 @@ if _can_build_reports:
         "language": st.session_state.get("lang", "IT"),
         "business_label": label_business(bt_by_key[st.session_state["business_type_key"]]),
         "open_days": int(st.session_state.get("open_days", 30) or 30),
+        "orders_per_day": float(_report_orders_day),
+        "avg_ticket": float((_report_daily_revenue / _report_orders_day) if _report_orders_day > 0 else 0.0),
         "capex": float(capex) if bool(st.session_state.get("inv_enable", False)) else 0.0,
         "deposits": float(deposits) if bool(st.session_state.get("inv_enable", False)) else 0.0,
         "immobilizations": float(immobilizations) if bool(st.session_state.get("inv_enable", False)) else 0.0,
